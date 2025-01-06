@@ -138,3 +138,11 @@ cython_debug/
 # FastAPI specific
 *.db
 *.sqlite3
+
+local_notes.txt
+
+
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
