@@ -14,7 +14,7 @@ app = FastAPI()
 
 
 class Todo(Base):
-    __tablename__ = 'todos'
+    __tablename__ = "todos"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     description = Column(String)
@@ -31,10 +31,7 @@ class TodoCreate(BaseModel):
 @app.post("/todos/")
 def create_todo(todo: TodoCreate):
     db = SessionLocal()
-    db_todo = Todo(
-        title=todo.title,
-        description=todo.description
-    )
+    db_todo = Todo(title=todo.title, description=todo.description)
     db.add(db_todo)
     db.commit()
     db.refresh(db_todo)
