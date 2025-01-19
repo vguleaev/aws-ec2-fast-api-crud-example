@@ -8,6 +8,7 @@ This is an example of basic FastAPI app deployed on AWS with Terraform files man
 - Docker
 - Terraform
 - Pydantic
+- sqlmodel
 - Ruff 
 - mypy
 - uv

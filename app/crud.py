@@ -1,5 +1,7 @@
-from app.models import Todo, todos
+from app.models import Todo
 from app.schemas import TodoCreate, TodoUpdate
+from app.db.db import engine
+from sqlmodel import Session, select
 
 
 class TodoCRUD:
@@ -7,35 +9,51 @@ class TodoCRUD:
         self.counter = 1
 
     def create_todo(self, todo_data: TodoCreate) -> Todo:
-        todo = Todo(id=self.counter, **todo_data.model_dump())
-        todos.append(todo)
-        self.counter += 1
-        return todo
+        with Session(engine) as session:
+            todo = Todo(**todo_data.model_dump())
+            session.add(todo)
+            session.commit()
+            session.refresh(todo)
+            return todo
 
     def read_todos(self) -> list[Todo]:
-        return todos
+        with Session(engine) as session:
+            statement = select(Todo)
+            todos = list(session.exec(statement).all())
+            return todos
 
     def read_todo(self, todo_id: int) -> Todo | None:
-        for todo in todos:
-            if todo.id == todo_id:
-                return todo
-        return None
+        with Session(engine) as session:
+            statement = select(Todo).where(Todo.id == todo_id)
+            todo = session.exec(statement).first()
+            return todo
 
     def update_todo(self, todo_id: int, todo_data: TodoUpdate) -> Todo | None:
-        todo = self.read_todo(todo_id)
-        if not todo:
-            return None
-        updated_todo = todo.model_copy(update=todo_data.model_dump())
-        todos[todos.index(todo)] = updated_todo
-        return updated_todo
+        with Session(engine) as session:
+            statement = select(Todo).where(Todo.id == todo_id)
+            todo = session.exec(statement).first()
+            if not todo:
+                return None
+
+            todo.title = todo_data.title
+            todo.description = todo_data.description
+            todo.completed = todo_data.completed
+
+            session.add(todo)
+            session.commit()
+            session.refresh(todo)
+            return todo
 
     def delete_todo(self, todo_id: int) -> bool:
-        global todos
-        todo = self.read_todo(todo_id)
-        if not todo:
-            return False
-        todos = [todo for todo in todos if todo.id != todo_id]
-        return True
+        with Session(engine) as session:
+            statement = select(Todo).where(Todo.id == todo_id)
+            todo = session.exec(statement).first()
+            if not todo:
+                return False
+
+            session.delete(todo)
+            session.commit()
+            return True
 
 
 todo_crud = TodoCRUD()

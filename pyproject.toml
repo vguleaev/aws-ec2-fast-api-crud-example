@@ -1,12 +1,13 @@
 [project]
 name = "aws-ec2-fast-api-crud-example"
 version = "0.1.0"
-description = "Add your description here"
+description = "CRUD example with FastAPI and AWS EC2"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi[all]>=0.115.6",
     "pydantic>=2.10.4",
+    "sqlmodel>=0.0.22",
 ]
 
 [tool.uv]
