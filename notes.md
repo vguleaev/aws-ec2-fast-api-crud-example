@@ -1,4 +1,3 @@
-
 ### Dev Notes
 
 - Pydantic - validation
@@ -18,6 +17,7 @@ You do not need to create `venv` and `requirements.txt` to isolate and handle de
 #### Step by step create new project:
 
 **Create project with uv**:
+
 ```
 mkdir fastapi-todo
 cd fastapi-todo
@@ -29,11 +29,13 @@ uv init
 ```
 
 **How to add dependencies:**
+
 ```
 uv add "fastapi[all]" pydantic mypy ruff
 ```
 
 **Hot to add Dev dependency:**
+
 ```
 uv add pytest --dev
 ```
@@ -41,24 +43,28 @@ uv add pytest --dev
 #### Run project:
 
 **Install dependencies:**
+
 ```
 uv sync
 ```
 
 **Activate virtual environment**
+
 ```
 source .venv/bin/activate
 ```
 
 Inside virtual environment, you have access to fastapi cli, use it to run app:
+
 ```
-fastapi dev app/main.py 
+fastapi dev app/main.py
 ```
 
 For production use run (auto reload is disabled)
+
 ```
-fastapi run app/main.py 
-``` 
+fastapi run app/main.py
+```
 
 You can use command `uv run` to run a command inside project environment, e.g. `uv run fastapi run app/main.py`
 
@@ -73,16 +79,19 @@ mypy app
 ```
 
 **Run Ruff for linting:**
+
 ```
 ruff check
 ```
 
 **Run Ruff for formatting:**
+
 ```
 ruff format
 ```
 
 **To run all linting together use scripts:**
+
 ```
 uv run scripts/lint.sh
 ```
@@ -95,3 +104,22 @@ Official example of Fastapi CRUD in Docker with uv [here.](https://github.com/fa
 - Pydantic docs: https://docs.pydantic.dev/latest/
 - Uv docs: https://docs.astral.sh/uv/
 - Ruff docs: https://docs.astral.sh/ruff/
+
+### Run Terraform
+
+To init project run:
+
+```
+terraform init
+```
+
+Add variables to `terraform.tfvars` file and create `variables.tf` file with variables.
+
+Directory `terraform` contains terraform state (should not be commited to git).
+
+To run plan and apply (inside terraform directory):
+
+```
+terraform plan
+terraform apply
+```
