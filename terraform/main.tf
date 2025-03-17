@@ -9,6 +9,8 @@ resource "aws_instance" "app" {
   tags = {
     Name = "FastAPI-EC2"
   }
+
+  vpc_security_group_ids = [aws_security_group.fast_api_security_group.id]
 }
 
 resource "aws_db_instance" "postgres" {
@@ -30,5 +32,50 @@ resource "aws_db_instance" "postgres" {
 
   tags = {
     Name = "FastAPI-RDS"
+  }
+}
+
+resource "aws_security_group" "fast_api_security_group" {
+  name        = "fast_api_security_group"
+  description = "Allow web and SSH traffic"
+
+  # SSH access
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # HTTP access
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # HTTPS access
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # FastAPI default port
+  ingress {
+    from_port   = 8000
+    to_port     = 8000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
