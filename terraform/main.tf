@@ -79,3 +79,23 @@ resource "aws_security_group" "fast_api_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_security_group" "rds_security_group" {
+  name        = "rds_security_group"
+  description = "Allow access to RDS from EC2"
+
+  # Allow traffic from the EC2 security group
+  ingress {
+    from_port       = 5432
+    to_port         = 5432
+    protocol        = "tcp"
+    security_groups = [aws_security_group.fast_api_security_group.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
