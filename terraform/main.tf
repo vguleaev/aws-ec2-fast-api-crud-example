@@ -25,6 +25,8 @@ resource "aws_db_instance" "postgres" {
   identifier           = "postgres-db"
   skip_final_snapshot  = true
 
+  vpc_security_group_ids = [aws_security_group.rds_security_group.id]
+
   # Free Tier requirements
   publicly_accessible     = true
   multi_az                = false

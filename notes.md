@@ -123,3 +123,9 @@ To run plan and apply (inside terraform directory):
 terraform plan
 terraform apply
 ```
+
+To destroy all resources:
+
+```
+terraform destroy
+```
