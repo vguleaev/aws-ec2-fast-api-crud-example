@@ -1,4 +1,6 @@
 #!/bin/sh -e
 set -x
 
-pytest
+# -v: verbose output
+# -s: show print statements
+python -m pytest app/tests/ -v -s
